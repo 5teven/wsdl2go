@@ -97,19 +97,19 @@ func doRoundTrip(c *Client, setHeaders func(*http.Request), in, out Message) err
 		// NSAttr:       c.Namespace,
 		// TNSAttr:      c.ThisNamespace,
 		// XSIAttr:      XSINamespace,
-		Header:       c.Header,
-		Body:         in,
+		Header: c.Header,
+		Body:   in,
 	}
 
 	if req.EnvelopeAttr == "" {
 		req.EnvelopeAttr = "http://schemas.xmlsoap.org/soap/envelope/"
 	}
-	if req.NSAttr == "" {
-		req.NSAttr = c.URL
-	}
-	if req.TNSAttr == "" {
-		req.TNSAttr = req.NSAttr
-	}
+	// if req.NSAttr == "" {
+	// 	req.NSAttr = c.URL
+	// }
+	// if req.TNSAttr == "" {
+	// 	req.TNSAttr = req.NSAttr
+	// }
 	var b bytes.Buffer
 	err := xml.NewEncoder(&b).Encode(req)
 	if err != nil {
@@ -223,9 +223,9 @@ func (e *HTTPError) Error() string {
 type Envelope struct {
 	XMLName      xml.Name `xml:"SOAP-ENV:Envelope"`
 	EnvelopeAttr string   `xml:"xmlns:SOAP-ENV,attr"`
-	NSAttr       string   `xml:"xmlns:ns,attr"`
-	TNSAttr      string   `xml:"xmlns:tns,attr"`
-	XSIAttr      string   `xml:"xmlns:xsi,attr,omitempty"`
-	Header       Message  `xml:"SOAP-ENV:Header"`
-	Body         Message  `xml:"SOAP-ENV:Body"`
+	// NSAttr       string   `xml:"xmlns:ns,attr,omitempty"`
+	// TNSAttr      string   `xml:"xmlns:tns,attr,omitempty"`
+	// XSIAttr      string   `xml:"xmlns:xsi,attr,omitempty"`
+	Header Message `xml:"SOAP-ENV:Header"`
+	Body   Message `xml:"SOAP-ENV:Body"`
 }
