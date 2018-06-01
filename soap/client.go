@@ -94,9 +94,9 @@ func doRoundTrip(c *Client, setHeaders func(*http.Request), in, out Message) err
 	setXMLType(reflect.ValueOf(in))
 	req := &Envelope{
 		EnvelopeAttr: c.Envelope,
-		NSAttr:       c.Namespace,
-		TNSAttr:      c.ThisNamespace,
-		XSIAttr:      XSINamespace,
+		// NSAttr:       c.Namespace,
+		// TNSAttr:      c.ThisNamespace,
+		// XSIAttr:      XSINamespace,
 		Header:       c.Header,
 		Body:         in,
 	}
