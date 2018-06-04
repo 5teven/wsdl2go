@@ -94,15 +94,23 @@ func doRoundTrip(c *Client, setHeaders func(*http.Request), in, out Message) err
 	setXMLType(reflect.ValueOf(in))
 	req := &Envelope{
 		EnvelopeAttr: c.Envelope,
-		Header: c.Header,
-		Body:   in,
+		Header:       c.Header,
+		Body:         in,
 	}
 
 	if req.EnvelopeAttr == "" {
 		req.EnvelopeAttr = "http://schemas.xmlsoap.org/soap/envelope/"
 	}
+	var b2 bytes.Buffer
+	err := xml.NewEncoder(&b2).Encode(req)
+
+	// new code
+	fmt.Println("before", string(b2.Bytes()))
+	b2b := bytes.Replace(b2.Bytes(), []byte(`<s:Body>`), []byte(`<s:Body xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">`), -1)
 	var b bytes.Buffer
-	err := xml.NewEncoder(&b).Encode(req)
+	b.Write(b2b)
+	fmt.Println("after", string(b.Bytes()))
+
 	if err != nil {
 		return err
 	}
@@ -214,6 +222,6 @@ func (e *HTTPError) Error() string {
 type Envelope struct {
 	XMLName      xml.Name `xml:"s:Envelope"`
 	EnvelopeAttr string   `xml:"xmlns:s,attr"`
-	Header Message `xml:"s:Header"`
-	Body   Message `xml:"s:Body"`
+	Header       Message  `xml:"s:Header"`
+	Body         Message  `xml:"s:Body"`
 }
